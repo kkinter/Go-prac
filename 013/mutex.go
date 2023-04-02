@@ -16,8 +16,11 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(gs)
 
+	var mu sync.Mutex
+
 	for i := 0; i < gs; i++ {
 		go func() {
+			mu.Lock()
 			// counter 공유 변수 공유 변수를 로컬 변수 v 에 할당
 			v := counter
 			// time.Sleep(time.Second)
@@ -27,6 +30,7 @@ func main() {
 			v++
 			// 로컬 변수 값을 공유변수에 쓰고
 			counter = v
+			mu.Unlock()
 			// 작업이 끝남
 			wg.Done()
 		}()

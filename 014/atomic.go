@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"runtime"
 	"sync"
+	"sync/atomic"
 )
 
 func main() {
 	fmt.Println("CPUs:", runtime.NumCPU())
 	fmt.Println("Goroutines:", runtime.NumGoroutine())
-
-	counter := 0
+	
+	// Go 에서 64라는 숫자를 확인할 때마다 아토믹 패키지를 떠올려라
+	var counter int64
 
 	const gs = 100
 	var wg sync.WaitGroup
@@ -18,16 +20,9 @@ func main() {
 
 	for i := 0; i < gs; i++ {
 		go func() {
-			// counter 공유 변수 공유 변수를 로컬 변수 v 에 할당
-			v := counter
-			// time.Sleep(time.Second)
-			// Gosched CPU를 다른 루틴에 양보
+			atomic.AddInt64(&counter, 1)
 			runtime.Gosched()
-			// 로컬 변수 증가
-			v++
-			// 로컬 변수 값을 공유변수에 쓰고
-			counter = v
-			// 작업이 끝남
+			fmt.Println("Counter :", atomic.LoadInt64(&counter))
 			wg.Done()
 		}()
 		fmt.Println("Goroutines:", runtime.NumGoroutine())
