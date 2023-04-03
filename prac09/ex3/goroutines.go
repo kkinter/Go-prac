@@ -10,7 +10,9 @@ func main() {
 	fmt.Println("CPUs", runtime.NumCPU())
 	fmt.Println("Gors", runtime.NumGoroutine())
 
+	// 공유 변수
 	counter := 0
+	// 고루틴 생성
 	const gs = 100
 	var wg sync.WaitGroup
 
