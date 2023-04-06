@@ -1,28 +1,25 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"sort"
 )
 
 func main() {
 	var t int
-	fmt.Scan(&t)
+	reader := bufio.NewReader(os.Stdin)
+  fmt.Fscan(reader, &t)
 
 	nums := make([]int, t)
 	for i := 0; i < t; i++{
-		fmt.Scan(&nums[i])
+		fmt.Fscan(reader, &nums[i])
 	}
 
-	var maxVal int = 0
-	var minVal int = 1_000_000
+	sort.Slice(nums, func(i, j int) bool {
+		return nums[i] < nums[j]
+	})
 
-	for _, v :=  range nums{
-		if maxVal < v{
-			maxVal = v
-		}
-		if minVal > v{
-			minVal = v
-		}
-	}
-	fmt.Println(maxVal, minVal)
+	fmt.Printf("%d %d\n", nums[0], nums[t - 1])
 }
