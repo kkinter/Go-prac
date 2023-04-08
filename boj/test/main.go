@@ -1,10 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"strings"
+)
 
 func main() {
 	str := "hello 세계"
-	for _, v := range str {
-		fmt.Printf("%T, %c\n", v, v) // int32
-	}
+	// tmp := strings.ToLower(str)
+	z := strings.Split(str, " ")
+	// sort.Slice(tmp, func(i, j int) bool {
+	// 	return tmp[i] < tmp[j]
+	// })
+	fmt.Println(z)
 }
