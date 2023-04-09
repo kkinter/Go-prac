@@ -144,17 +144,32 @@ func (l *LinkedList[T]) findPrevNode(node *Node[T]) *Node[T] {
 }
 
 // X 체크
-func (l *LinkedList[T]) PopFront() {
+//
+//	func (l *LinkedList[T]) PopFront() *Node[T] {
+//		if l.root == nil {
+//			return nil
+//		}
+//		// l.root = l.root.next
+//		// l.root.next = nil
+//		l.root.next, l.root = nil, l.root.next
+//		l.count--
+//		n := l.root
+//		if l.root == nil {
+//			l.tail = nil
+//		}
+//		return n
+//	}
+func (l *LinkedList[T]) PopFront() *Node[T] {
 	if l.root == nil {
-		return
+		return nil
 	}
-	// l.root = l.root.next
-	// l.root.next = nil
+	n := l.root
 	l.root.next, l.root = nil, l.root.next
-	l.count--
 	if l.root == nil {
 		l.tail = nil
 	}
+	l.count--
+	return n
 }
 
 // 이전 노드를 찾아서 이전 노드의 넥스트를 다음 노드로 바꿔줘야 함.
@@ -184,6 +199,39 @@ func (l *LinkedList[T]) Remove(node *Node[T]) {
 		l.tail = prev
 	}
 	l.count--
+}
+
+func (l *LinkedList[T]) Reverse() {
+	newL := &LinkedList[T]{}
+	for l.root != nil {
+		n := l.PopFront()
+		newL.PushFront(n.Value)
+	}
+	l.count = newL.count
+	l.root = newL.root
+	l.tail = newL.tail
+}
+
+func (l *LinkedList[T]) Reverse2() {
+	if l.root == nil {
+		return
+	}
+	node := l.root
+	// 현재 노드와 그 다음노드를 바꾸기 때문에 그 다음 노드를 기억하고 있어야 함.
+	next := node.next
+	l.root.next = nil
+
+	for next != nil {
+		// 기록하고 있어야 함.
+		nextNext := node.next.next
+		next.next = node
+
+		node = next
+		next = nextNext
+	}
+
+	l.root, l.tail = l.tail, l.root
+
 }
 
 func main() {
